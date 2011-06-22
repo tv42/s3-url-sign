@@ -27,12 +27,16 @@ def main():
         else:
             key = None
 
+    conn_kwargs = {}
+    host = boto.config.get('Boto', 's3_host')
+    if host is not None:
+        conn_kwargs['host'] = host
+    port = boto.config.getint('Boto', 's3_port')
+    if port is not None:
+        conn_kwargs['port'] = port
     conn = boto.s3.connection.S3Connection(
-        # aws_access_key_id=cfg.get(section, 'access_key'),
-        # aws_secret_access_key=cfg.get(section, 'secret_key'),
-        # is_secure=cfg.getboolean(section, 'is_secure'),
-        # port=port,
-        # host=cfg.get(section, 'host'),
+        calling_format=boto.s3.connection.OrdinaryCallingFormat(),
+        **conn_kwargs
         )
     kwargs = {}
     if bucket is not None:
